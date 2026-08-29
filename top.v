@@ -37,11 +37,6 @@ wire [7:0] read_data;
 wire done;
 wire error;
 
-
-
-// FIFO wires
-
-
 wire fifo_full;
 wire fifo_empty;
 wire fifo_wr_en;
@@ -49,8 +44,8 @@ wire fifo_rd_en;
 wire [7:0] fifo_data_in;
 wire [7:0] fifo_data_out;
 
-wire [7:0] fifo_prdata;
-wire fifo_pready;
+  wire [7:0] fifo_prdata;
+  wire fifo_pready;
 wire fifo_pslverr;
 
 wire uart_sel;
@@ -78,19 +73,12 @@ debounce D2(
     .btn_db(rd_db)
 );
 
-
-//------------------------------------------------
-// Edge Detector
-//------------------------------------------------
-
 edge_detector E1(
     .clk(clk),
     .rst(rst),
     .signal_in(wr_db),
     .pulse(wr_pulse)
 );
-
-
 edge_detector E2(
     .clk(clk),
     .rst(rst),
@@ -99,9 +87,7 @@ edge_detector E2(
 );
 
 
-//------------------------------------------------
-// APB MASTER
-//------------------------------------------------
+
 
 apb3_master MASTER(
 
@@ -134,9 +120,6 @@ apb3_master MASTER(
 );
 
 
-//------------------------------------------------
-// APB SLAVE (Temporary)
-//------------------------------------------------
 
 assign pready  = fifo_pready;
 assign pslverr = fifo_pslverr;
@@ -152,12 +135,7 @@ apb3_decoder DEC(
     .fifo_sel(fifo_sel),
     .pwm_sel(pwm_sel)
 
-    
-
-
 );
-
-
 
 apb_fifo_slave FIFO_SLAVE(
 
@@ -180,8 +158,6 @@ apb_fifo_slave FIFO_SLAVE(
     .data_out(fifo_data_out),
     .full(fifo_full),
     .empty(fifo_empty)
-    
- 
 
 );
 FIFO F1(
@@ -199,11 +175,6 @@ FIFO F1(
 
 );
 
-
-//------------------------------------------------
-// 7 Segment Display
-//------------------------------------------------
-
 display_mux DISP(
 
     .clk(clk),
@@ -215,12 +186,7 @@ display_mux DISP(
     .seg(seg)
 
 );
-
-
-//------------------------------------------------
-// LED STATUS
-//------------------------------------------------
-
+    
 assign led[0] = psel;
 assign led[1] = penable;
 assign led[2] = pwrite;
@@ -235,8 +201,5 @@ assign led[7] = fifo_full;
 assign led[8] = fifo_empty;
 
 assign led[9] = 1'b0;
-
-
-
 
 endmodule
