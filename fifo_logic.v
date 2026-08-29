@@ -41,9 +41,9 @@ integer i;
 always @(posedge clk) begin
     if (rst) begin
         wr_ptr <= 3'd0;
-        rd_ptr <= 3'd0;
-        count  <= 4'd0;
-        data_out <= 8'd0;
+          rd_ptr <= 3'd0;
+          count  <= 4'd0;
+          data_out <= 8'd0;
 
         for (i = 0; i < 8; i = i + 1)
             mem[i] <= 8'd0;
@@ -51,14 +51,14 @@ always @(posedge clk) begin
     else begin
         if (wr_en && !full) begin
             mem[wr_ptr] <= data_in;
-            wr_ptr <= wr_ptr + 1'b1;
-            count <= count + 1'b1;
+             wr_ptr <= wr_ptr + 1'b1;
+              count <= count + 1'b1;
         end
 
         if (rd_en && !empty) begin
-            data_out <= mem[rd_ptr];
-            rd_ptr <= rd_ptr + 1'b1;
-            count <= count - 1'b1;
+               data_out <= mem[rd_ptr];
+              rd_ptr <= rd_ptr + 1'b1;
+              count <= count - 1'b1;
         end
     end
 end
