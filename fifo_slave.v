@@ -23,25 +23,25 @@
 module apb_fifo_slave(
 
   
-    input  wire       clk,
-    input  wire       rst,
+    input  wire  clk,
+    input  wire  rst,
 
-    input  wire       psel,
-    input  wire       penable,
-    input  wire       pwrite,
+    input  wire  psel,
+    input  wire   penable,
+    input  wire pwrite,
     input  wire [7:0] pwdata,
 
     output reg  [7:0] prdata,
-    output reg        pready,
-    output reg        pslverr,
+    output reg  pready,
+    output reg   pslverr,
 
-    output reg        wr_en,
-    output reg        rd_en,
+    output reg   wr_en,
+    output reg  rd_en,
     output wire [7:0] data_in,
 
     input  wire [7:0] data_out,
-    input  wire       full,
-    input  wire       empty
+    input  wire   full,
+    input  wire    empty
 
 );
 
@@ -53,37 +53,37 @@ always @(posedge clk or posedge rst)
 begin
     if(rst)
     begin
-        wr_en        <= 1'b0;
-        rd_en        <= 1'b0;
-        pready       <= 1'b0;
-        pslverr      <= 1'b0;
-        prdata       <= 8'd0;
+        wr_en  <= 1'b0;
+        rd_en <= 1'b0;
+        pready  <= 1'b0;
+        pslverr  <= 1'b0;
+        prdata   <= 8'd0;
         read_pending <= 1'b0;
     end
     else
     begin
-        wr_en   <= 1'b0;
-        rd_en   <= 1'b0;
-        pready  <= 1'b0;
+        wr_en <= 1'b0;
+        rd_en <= 1'b0;
+        pready <= 1'b0;
         pslverr <= 1'b0;
 
-        // Second cycle of READ
+        
         if(read_pending)
         begin
-            prdata       <= data_out;
-            pready       <= 1'b1;
+            prdata  <= data_out;  //read data 
+            pready  <= 1'b1;
             read_pending <= 1'b0;
         end
 
-        // New APB transaction
-        else if(psel && penable)
+      
+        else if(psel && penable)   // acess state
         begin
 
             if(pwrite)
             begin
                 if(!full)
                 begin
-                    wr_en   <= 1'b1;
+                    wr_en <= 1'b1;
                     pready  <= 1'b1;
                 end
                 else
@@ -96,13 +96,13 @@ begin
             begin
                 if(!empty)
                 begin
-                    rd_en        <= 1'b1;
+                    rd_en  <= 1'b1;
                     read_pending <= 1'b1;
                 end
                 else
                 begin
                     pslverr <= 1'b1;
-                    pready  <= 1'b1;
+                    pready <= 1'b1;
                 end
             end
 
